@@ -113,7 +113,7 @@ The first and most important thing we will do is change the root password. This 
 
 Login to root using the default password `fa`. Change password using
 
-```bash
+```console
 passwd
 ```
 
@@ -121,23 +121,23 @@ passwd
 
 While logged in as root we will delete the default user.
 
-```bash
+```console
 deluser pi
 ```
 
 We will now create our own user. You are free to choose a fun name, but i felt particularly inspirationless that day and choose the username `nas`.
 
-```bash
+```console
 useradd nas
 ```
 
 The newly added user is going to be the primary user we will use when logging in to the CM3588. Set a password and add it to the sudoers group.
 
-```bash
+```console
 passwd nas
 ```
 
-```bash
+```console
 usermod -aG sudo nas
 ```
 
@@ -147,8 +147,8 @@ From now on we will use the nas user instead of root.
 
 We now have a squeaky clean and fresh Debian install and are ready to install OMV. We will use the official install script ([see more here](https://github.com/OpenMediaVault-Plugin-Developers/installScript)).
 
-```bash
-sudo wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | sudo bash
+```console
+sudo wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | sudo console
 ```
 
 This automatically installs OMV.
@@ -174,13 +174,13 @@ Make sure to change the admin password. You should see the _beautiful_ (but prob
 
 We will now disable root login via SSH. We do this step now since OMV would otherwise overwrite this change after install. SSH back into the system.
 
-```bash
+```console
 vim /etc/ssh/sshd_config
 ```
 
 Search for `PermitRootLogin yes` and change it to `PermitRootLogin no`.
 
-```bash
+```console
 systemctl restart ssh
 ```
 
@@ -192,7 +192,7 @@ The [FriendlyElec Wiki](https://wiki.friendlyelec.com/wiki/index.php/Getting_Sta
 
 Tailscale can be installed at the system level very easily by
 
-```bash
+```console
 curl -fsSL https://tailscale.com/install.sh | sh
 ```
 
@@ -282,13 +282,13 @@ Login in to your GitLab user. Click on your profile icon and go to _Preferences_
 
 Install glab on your device. My preferred method of installation is using a package manager
 
-```bash
+```console
 choco install glab
 ```
 
 Now we must login with glab
 
-```bash
+```console
 glab auth login --hostname cm3588.your-tailnet.ts.net:8929
 ```
 
@@ -297,7 +297,17 @@ glab auth login --hostname cm3588.your-tailnet.ts.net:8929
 3. Authenticate Git with GitLab credentials (yes).
 4. Use HTTPS as host API protocol.
 
-You should be logged in as your GitLab user. You can use glab to create, delete and configure your repos.
+You should be logged in as your GitLab user. It might be necessary to edit the glab config:
+
+```console
+glab config edit
+```
+
+change `host` to your tailnet url:
+
+```yml
+host: cm3588.your-tailnet.ts.net:8929
+```
 
 ### Reducing GitLab RAM Usage
 
@@ -317,13 +327,13 @@ The CM3588 is extremely capable at video transcoding due to the integrated GPU. 
 
 First we must install drivers for the Mali GPU. They are hosted on GitHub [link](https://github.com/tsukumijima/libmali-rockchip). Download the latest using `wget`:
 
-```bash
+```console
 wget https://github.com/tsukumijima/libmali-rockchip/releases/download/v1.9-1-3238416/libmali-valhall-g610-g13p0-gbm_1.9-1_arm64.deb
 ```
 
 Install using dpkg:
 
-```bash
+```console
 dpkg -i libmali-valhall-g610-g13p0-gbm_1.9-1_arm64.deb
 ```
 
