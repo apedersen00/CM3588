@@ -266,13 +266,22 @@ We must now generate HTTPS certificates using Tailscale. SSH into the CM3588 and
 2. `cm3588.your-tailnet.ts.net.key`
 
 We must now pass these to GitLab.
-Move them to GitLabs `/etc/config/ssl` folder. The actual directory using the compose file above should be `/srv/dev-disk-by-uuid-UUID/config/ssl`.
+Move them to GitLabs `/etc/config/ssl` folder. The actual directory using the compose file above should be `/srv/dev-disk-by-uuid-UUID/appdata/config/ssl`.
 
 Start the GitLab container again by pressing "Up". With any luck you should now be able to access GitLab with Tailscale using the address `https://cm3588.your-tailnet.ts.net:8929`.
 
 You must now login as admin and configure GitLab to your liking, adding users etc.. GitLab autogenerates a admin password located in a file in the `appdata/config` folder. Note that this file is automatically deleted after 24 hours.
 
-Note that the HTTPS certificates expire after 90 days. After which you must generate them again and replace the expired ones.
+Note that the HTTPS certificates expire after 90 days. After which you must generate them again and replace the expired ones. I use a small shell script to easily update the certificates upon expiry:
+
+```shell
+tailscale cert cm3588.your-tailnet.ts.net
+
+mv -f cm3588.your-tailnet.ts.net.crt /srv/dev-disk-by-uuid-UUID/appdata/config/ssl/cm3588.your-tailnet.ts.net.crt
+mv -f cm3588.your-tailnet.ts.net.crt /srv/dev-disk-by-uuid-UUID/appdata/config/ssl/cm3588.your-tailnet.ts.net.key
+```
+
+To update certificates: `sudo update_https_certs.sh`.
 
 ### Using GitLab CLI (glab)
 
